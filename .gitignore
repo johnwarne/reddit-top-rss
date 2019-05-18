@@ -1,0 +1,6 @@
+/.vscode
+/cache
+/config.php
+/env.php
+/node_modules
+/package-lock.json

@@ -1,0 +1,9 @@
+$color__blue:          #039BE5;
+$color__grey-lightest: desaturate(rgba($color__blue, 0.05), 60%);
+$color__grey-lighter:  desaturate(rgba($color__blue, 0.1), 60%);
+$color__grey-light:    desaturate(rgba($color__blue, 0.3), 50%);
+$color__grey:          #868e96;
+
+// Bootstrap overrides
+$blue: $color__blue;
+$jumbotron-bg: $color__grey-lighter;
