@@ -4,7 +4,7 @@ Reddit Top RSS is a set of scripts for [Reddit's API](https://www.reddit.com/dev
 
 ## Screenshot
 
-![Reddit Top RSS screenshot](dist/img/screenshot.png?raw=true)
+![Reddit Top RSS screenshot](dist/img/preview.gif?raw=true)
 
 ## Installation and usage
 
