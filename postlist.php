@@ -59,7 +59,7 @@ if(get_http_response_code($requestedSubreddit) != "200"){
       $itemDataUrl = "https://www.reddit.com" .  $item["data"]["permalink"];
       $itemDataUrl = preg_replace("/&?utm_(.*?)\=[^&]+/", "", $itemDataUrl);
       $thumbnailURL = "https://www.redditstatic.com/mweb2x/favicon/76x76.png";
-      if($item["data"]["thumbnail"] && $item["data"]["thumbnail"] != "self" && $item["data"]["thumbnail"] != "nsfw" && $item["data"]["thumbnail"] != "spoiler") {
+      if(!in_array($item["data"]["thumbnail"], ['default', 'nsfw', 'self', 'spoiler'])) {
         $thumbnailURL = $item["data"]["thumbnail"];
       }
       $score = $item["data"]["score"];
