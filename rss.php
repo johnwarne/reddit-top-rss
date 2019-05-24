@@ -24,10 +24,6 @@ $jsonFeedFileItems = $jsonFeedFileParsed["data"]["children"];
 usort($jsonFeedFileItems, "sortByCreatedDate");
 
 
-// Set empty items array
-$jsonFeedItems = [];
-
-
 // Feed description text
 $feedDescriptionText = "Hot posts in /r/";
 $feedDescriptionText .= $_GET["subreddit"];
@@ -102,10 +98,6 @@ foreach($jsonFeedFileItems as $item) {
 
 	// Only show posts at or above score threshold
 	if ($item["data"]["score"] >= $thresholdScore) {
-
-
-		// Add item to items array
-		$jsonFeedItems[] = $item;
 
 
 		// Remove any utm junk from main item link
