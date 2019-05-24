@@ -6,6 +6,8 @@ Reddit Top RSS is a set of scripts for [Reddit's API](https://www.reddit.com/dev
 
 ![Reddit Top RSS screenshot](dist/img/preview.gif?raw=true)
 
+[https://reddit-top-rss.herokuapp.com/](https://reddit-top-rss.herokuapp.com/)
+
 ## Motivation
 
 I prefer to interact with Reddit in a low-volume way, so I let Reddit Top RSS surface the most popular posts per subreddit in my [RSS reader of choice](https://reederapp.com/). I usually use the `averagePostsPerDay` filter so I can expect a certain amount of posts in my feeds per day.
