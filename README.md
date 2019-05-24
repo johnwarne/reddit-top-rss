@@ -6,6 +6,10 @@ Reddit Top RSS is a set of scripts for [Reddit's API](https://www.reddit.com/dev
 
 ![Reddit Top RSS screenshot](dist/img/preview.gif?raw=true)
 
+## Motivation
+
+I prefer to interact with Reddit in a low-volume way, so I let Reddit Top RSS surface the most popular posts per subreddit in my [RSS reader of choice](https://reederapp.com/). I usually use the `averagePostsPerDay` filter so I can expect a certain amount of posts in my feeds per day.
+
 ## Installation and usage
 
 To install, clone this repository somewhere with PHP >= 5.6 installed, and open `index.php` in a browser to view the front end. Enter your parameters into the fields to get a preview of the posts that the filters will output. Click the `RSS` button at top to open a new tab with the rendered RSS XML output of the specified filters. This is the URL you subscribe to in your RSS aggregator.
