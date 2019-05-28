@@ -7,24 +7,24 @@ if (file_exists("config.php")) {
 }
 
 
+// Sort and filter
+include "sort-and-filter.php";
+
+
 // Check if requested subreddit is valid
-$requestedSubreddit = "https://www.reddit.com/r/" . $_GET["subreddit"] . "/top/.json";
+$requestedSubreddit = "https://www.reddit.com/r/" . $subreddit . "/top/.json";
 function get_http_response_code($requestedSubreddit) {
   $headers = get_headers($requestedSubreddit);
   return substr($headers[0], 9, 3);
 }
 if(get_http_response_code($requestedSubreddit) != "200"){
-  echo "<div class='alert alert-warning' role='alert'>/r/" . $_GET["subreddit"] . " is not a valid subreddit</div>";
+  echo "<div class='alert alert-warning' role='alert'>/r/" . $subreddit . " is not a valid subreddit</div>";
 } else {
-
-
-  // Sort and filter
-  include "sort-and-filter.php";
 
 
   // Description text
   $postListDescription = "<p>Hot posts in <strong>/r/";
-  $postListDescription .= $_GET["subreddit"];
+  $postListDescription .= $subreddit;
   $postListDescription .= "</strong>";
   if($thresholdScore) {
     $postListDescription .= " at or above a score of <strong>";

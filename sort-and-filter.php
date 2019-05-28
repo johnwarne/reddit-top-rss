@@ -7,7 +7,7 @@ include "functions.php";
 // Get requested subreddit
 // If none is specified, set a default
 if(isset($_GET["subreddit"])) {
-	$subreddit = $_GET["subreddit"];
+	$subreddit = strip_tags(trim($_GET["subreddit"]));
 } else {
 	$subreddit = DEFAULT_SUBREDDIT;
 }

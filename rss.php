@@ -26,7 +26,7 @@ usort($jsonFeedFileItems, "sortByCreatedDate");
 
 // Feed description text
 $feedDescriptionText = "Hot posts in /r/";
-$feedDescriptionText .= $_GET["subreddit"];
+$feedDescriptionText .= $subreddit;
 if($thresholdScore) {
 	if(isset($_GET["score"]) && $_GET["score"]) {
 		$feedDescriptionText .= " at or above a score of ";

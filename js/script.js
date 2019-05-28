@@ -52,7 +52,7 @@ function formSubmit() {
 		});
 		window.history.pushState({}, document.title, uri);
 		// Set jumbotron title to value from subreddit field
-		$("h1.page-title span.subreddit").text($("input[name=subreddit]").val());
+		$("h1.page-title span.subreddit").text($("input[name=subreddit]").val().replace(/(<([^>]+)>)/ig,""));
 		// Set RSS badge URL
 		$("a.rss-badge").attr("href", uri + "&view=rss").tooltip("hide").attr("data-original-title", uri + "&view=rss");
 		// Return filtered posts on submit
