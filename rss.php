@@ -145,7 +145,7 @@ foreach($jsonFeedFileItems as $item) {
 
 
 		// Description comments link
-		$itemDescription .= "<p><a href='https://www.reddit.com" . $item["data"]["permalink"] . "'>Comments</a> </p>";
+		$itemDescription .= "<p><a href='https://www.reddit.com" . $item["data"]["permalink"] . "'>Post permalink</a> </p>";
 
 
 		// Add media if it exists
