@@ -254,6 +254,28 @@ foreach($jsonFeedFileItems as $item) {
 		}
 
 
+		// Add article's best comments
+		if(isset($_GET["comments"]) && $_GET["comments"] > 0) {
+			$commentsURL = "https://www.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . $_GET["comments"];
+			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5);
+			$commentsJSONParsed = json_decode($commentsJSON, true);
+			$commentCount = count($commentsJSONParsed[1]["data"]["children"]);
+			if($commentCount) {
+				$itemDescription .= "<p>&nbsp;</p><hr><p>&nbsp;</p>";
+				if($commentCount == 1) {
+					$itemDescription .= "<p>Best comment</p>";
+				} elseif($commentCount > 1) {
+					$itemDescription .= "<p>Best comments</p>";
+				}
+				$itemDescription .= "<ol>";
+				for ($i = 0; $i < $commentCount; $i++) {
+					$itemDescription .= "<li>" . $commentsJSONParsed[1]["data"]["children"][$i]["data"]["body"] . "<ul><li><a href='https://www.reddit.com/" . $commentsJSONParsed[1]["data"]["children"][$i]["data"]["permalink"] . "'><small>Permalink</small></a> | <a href='https://www.reddit.com/user/" . $commentsJSONParsed[1]["data"]["children"][$i]["data"]["author"] . "'><small>Author</small></a></li></ul></li>";
+				}
+				$itemDescription .= "</ol>";
+			}
+		}
+
+
 		//fill description node with CDATA content
 		$descriptionContents = $xml->createCDATASection($itemDescription);
 		$descriptionNode->appendChild($descriptionContents);
