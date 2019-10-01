@@ -261,7 +261,7 @@ foreach($jsonFeedFileItems as $item) {
 			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5);
 			$commentsJSONParsed = json_decode($commentsJSON, true);
 			$comments = $commentsJSONParsed[1]["data"]["children"];
-			if(strpos($comments[0]["data"]["body_html"], 'If you see comments in violation of our rules, please report them.') !== false || strpos($comments[0]["data"]["body"], 'If you see comments in violation of our rules, please report them.') !== false) {
+			if($comments[0]["data"]["author"] == "AutoModerator") {
 				unset($comments[0]);
 				$comments = array_values($comments);
 			}
