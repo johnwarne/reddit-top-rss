@@ -257,10 +257,19 @@ foreach($jsonFeedFileItems as $item) {
 
 		// Add article's best comments
 		if(isset($_GET["comments"]) && $_GET["comments"] > 0) {
-			$commentsURL = "https://www.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . $_GET["comments"];
+			$commentsURL = "https://www.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . (intval($_GET["comments"]) + 1);
 			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5);
 			$commentsJSONParsed = json_decode($commentsJSON, true);
-			$commentCount = count($commentsJSONParsed[1]["data"]["children"]);
+			$comments = $commentsJSONParsed[1]["data"]["children"];
+			if(strpos($comments[0]["data"]["body_html"], 'If you see comments in violation of our rules, please report them.') !== false || strpos($comments[0]["data"]["body"], 'If you see comments in violation of our rules, please report them.') !== false) {
+				unset($comments[0]);
+				$comments = array_values($comments);
+			}
+			if(count($comments) > $_GET["comments"]) {
+				$commentCount = $_GET["comments"];
+			} else {
+				$commentCount = count($comments);
+			}
 			if($commentCount) {
 				$itemDescription .= "<p>&nbsp;</p><hr><p>&nbsp;</p>";
 				if($commentCount == 1) {
@@ -270,7 +279,7 @@ foreach($jsonFeedFileItems as $item) {
 				}
 				$itemDescription .= "<ol>";
 				for ($i = 0; $i < $commentCount; $i++) {
-					$itemDescription .= "<li>" . htmlspecialchars_decode($commentsJSONParsed[1]["data"]["children"][$i]["data"]["body_html"]) . "<ul><li><a href='https://www.reddit.com/" . $commentsJSONParsed[1]["data"]["children"][$i]["data"]["permalink"] . "'><small>Permalink</small></a> | <a href='https://www.reddit.com/user/" . $commentsJSONParsed[1]["data"]["children"][$i]["data"]["author"] . "'><small>Author</small></a></li></ul></li>";
+					$itemDescription .= "<li>" . htmlspecialchars_decode($comments[$i]["data"]["body_html"]) . "<ul><li><a href='https://www.reddit.com/" . $comments[$i]["data"]["permalink"] . "'><small>Permalink</small></a> | <a href='https://www.reddit.com/user/" . $comments[$i]["data"]["author"] . "'><small>Author</small></a></li></ul></li>";
 				}
 				$itemDescription .= "</ol>";
 			}
