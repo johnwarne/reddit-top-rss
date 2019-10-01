@@ -217,7 +217,8 @@ foreach($jsonFeedFileItems as $item) {
 			case MERCURY_URL && strpos($item["data"]["domain"], "self.") === false:
 				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
-					if ($mercuryJSON = json_decode($mercuryJSON) && $mercuryJSON->lead_image_url) {
+					$mercuryJSON = json_decode($mercuryJSON);
+					if ($mercuryJSON->lead_image_url) {
 						$itemDescription .= "<p><img src='" . $mercuryJSON->lead_image_url . "' /></p>";
 					}
 				}
