@@ -279,7 +279,7 @@ foreach($jsonFeedFileItems as $item) {
 				}
 				$itemDescription .= "<ol>";
 				for ($i = 0; $i < $commentCount; $i++) {
-					$itemDescription .= "<li>" . htmlspecialchars_decode($comments[$i]["data"]["body_html"]) . "<ul><li><a href='https://www.reddit.com/" . $comments[$i]["data"]["permalink"] . "'><small>Permalink</small></a> | <a href='https://www.reddit.com/user/" . $comments[$i]["data"]["author"] . "'><small>Author</small></a></li></ul></li>";
+					$itemDescription .= "<li>" . htmlspecialchars_decode($comments[$i]["data"]["body_html"]) . "<ul><li><a href='https://www.reddit.com" . $comments[$i]["data"]["permalink"] . "'><small>Permalink</small></a> | <a href='https://www.reddit.com/user/" . $comments[$i]["data"]["author"] . "'><small>Author</small></a></li></ul></li>";
 				}
 				$itemDescription .= "</ol>";
 			}
