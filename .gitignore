@@ -1,5 +1,5 @@
 #------------------------
-#  Main ignored items
+#  Main ignored files
 #------------------------
 /.vscode
 /cache
@@ -10,7 +10,7 @@
 
 
 #------------------------
-#  OS Files
+#  OS files
 #------------------------
 .DS_Store
 .DS_Store?
