@@ -14,19 +14,60 @@ I prefer to interact with Reddit in a low-volume way, so I let Reddit Top RSS su
 
 ## Installation and usage
 
-To install, clone this repository somewhere with PHP >= 5.6 installed, and open `index.php` in a browser to view the front end. Enter your parameters into the fields to get a preview of the posts that the filters will output. Click the `RSS` button at top to open a new tab with the rendered RSS XML output of the specified filters. This is the URL you subscribe to in your RSS aggregator.
+### Manual
+
+To install manually, clone this repository somewhere with PHP >= 5.6 installed, and open `index.php` in a browser to view the front end. Enter your parameters into the fields to get a preview of the posts that the filters will output. Click the `RSS` button at top to open a new tab with the rendered RSS XML output of the specified filters. This is the URL you subscribe to in your RSS aggregator.
+
+### Docker
+
+A docker image is available at [https://hub.docker.com/r/johnny5w/reddit-top-rss](https://hub.docker.com/r/johnny5w/reddit-top-rss).
+
+#### Command line
+
+```docker
+docker run -p 80:8080 johnny5w/reddit-top-rss:latest
+```
+
+#### docker-compose
+
+```yaml
+reddit-top-rss:
+  image: johnny5w/reddit-top-rss
+  container_name: reddit-top-rss
+  restart: unless-stopped
+  ports:
+    - 80:8080
+  environment:
+    - DEFAULT_SUBREDDIT=news
+```
+
+#### Docker environment variables
+
+The following optional environment variables can be used to override the application defaults:
+
+| Parameter             | Function                                                                       |
+| --------------------- | ------------------------------------------------------------------------------ |
+| DEFAULT_SUBREDDIT     | This sets the initial subreddit on the first page load.<br/>Default: `pics`    |
+| MERCURY_URL           | URL of your Mercury parser instance. <a href="#mercury-parser">See below</a>.  |
+| MERCURY_API_KEY       | API key for your Mercury parser instance.                                      |
+| CACHE_REDDIT_JSON     | Whether to cache the JSON responses from Reddit.<br/>Default: `true`           |
+| CACHE_MERCURY_CONTENT | Whether to cache the responses from your Mercury instance.<br/>Default: `true` |
+| CACHE_RSS_FEEDS       | Whether to cache the outputted XML from Reddit Top RSS.<br/>Default: `true`    |
 
 ## Supported URL parameters
 
 There are five URL paramenters supported:
 
 ### subreddit
+
 The exact string of the subreddit as it appears in the Reddit URL. Only one subreddit may be chosen.
 
 ### score
+
 Items below the desired score will be filtered out.
 
 ### threshold
+
 This parameter will get the average score for the past month's hot posts and will filter out items that fall below this percentage. This is helpful for volatile subreddits — and subreddits in general — since more people are using the service and causing posts to be scored higher and higher. Since this is a percentage, the number of items in the outputted feed should be more consistent than when using the `score` parameter.
 
 ### averagePostsPerDay
