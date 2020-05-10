@@ -1,0 +1,6 @@
+.git
+.vscode
+cache
+js
+node_modules
+scss

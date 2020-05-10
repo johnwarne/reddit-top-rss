@@ -1,22 +1,50 @@
 <?php
 
 // Default subreddit
-define('DEFAULT_SUBREDDIT', 'pics');
+if ($_SERVER["DEFAULT_SUBREDDIT"]) {
+  define('DEFAULT_SUBREDDIT', $_SERVER["DEFAULT_SUBREDDIT"]);
+} else {
+  define('DEFAULT_SUBREDDIT', 'pics');
+}
 
 // Mercury Parser URL, e.g. https://mercuryparser.example.com
-define('MERCURY_URL', '');
+if ($_SERVER["MERCURY_URL"]) {
+  define('MERCURY_URL', $_SERVER["MERCURY_URL"]);
+} else {
+  define('MERCURY_URL', '');
+}
 
 // Mercury API key, e.g. YaaFZZf9rUvZJQLXmt&MN9efXKQJxMa1k8smtv09
-define('MERCURY_API_KEY', '');
+if ($_SERVER["MERCURY_API_KEY"]) {
+  define('MERCURY_API_KEY', $_SERVER["MERCURY_API_KEY"]);
+} else {
+  define('MERCURY_API_KEY', '');
+}
 
 // Cache Reddit JSON files
-define('CACHE_REDDIT_JSON', true);
+if ($_SERVER["CACHE_REDDIT_JSON"]) {
+  define('CACHE_REDDIT_JSON', $_SERVER["CACHE_REDDIT_JSON"]);
+} else {
+  define('CACHE_REDDIT_JSON', 'true');
+}
 
 // Cache Mercury Contend
-define('CACHE_MERCURY_CONTENT', true);
+if ($_SERVER["CACHE_MERCURY_CONTENT"]) {
+  define('CACHE_MERCURY_CONTENT', $_SERVER["CACHE_MERCURY_CONTENT"]);
+} else {
+  define('CACHE_MERCURY_CONTENT', 'true');
+}
 
 // Cache RSS feeds
-define('CACHE_RSS_FEEDS', true);
+if ($_SERVER["CACHE_RSS_FEEDS"]) {
+  define('CACHE_RSS_FEEDS', $_SERVER["CACHE_RSS_FEEDS"]);
+} else {
+  define('CACHE_RSS_FEEDS', 'true');
+}
 
 // Config version
-define('CONFIG_VERSION', 1);
+if ($_SERVER["CONFIG_VERSION"]) {
+  define('CONFIG_VERSION', $_SERVER["CONFIG_VERSION"]);
+} else {
+  define('CONFIG_VERSION', 1);
+}
