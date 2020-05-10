@@ -64,7 +64,7 @@ include 'functions.php';
 				<div class="col-lg-2"></div>
 				<div class="col-lg-8 text-center">
 					<p>Reddit Top RSS - <a href="https://github.com/johnwarne/reddit-top-rss/" target="_blank">https://github.com/johnwarne/reddit-top-rss/</a></p>
-					<?php if(CACHE_REDDIT_JSON || CACHE_MERCURY_CONTENT || CACHE_RSS_FEEDS) {
+					<?php if(CACHE_REDDIT_JSON == true || CACHE_MERCURY_CONTENT == true || CACHE_RSS_FEEDS == true) {
 						$url = "//" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 						$query = parse_url($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], PHP_URL_QUERY);
 						if ($query) {

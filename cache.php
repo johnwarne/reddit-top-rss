@@ -1,7 +1,7 @@
 <?php
 
 // Create cache directories if they don't exist and remove expired cache files
-if(CACHE_REDDIT_JSON) {
+if(CACHE_REDDIT_JSON == true) {
 	if (!file_exists("cache/reddit")) {
 		mkdir("cache/reddit", 0755, true);
 	}
@@ -13,7 +13,7 @@ if(CACHE_REDDIT_JSON) {
 		}
 	}
 }
-if(CACHE_MERCURY_CONTENT) {
+if(CACHE_MERCURY_CONTENT == true) {
 	if (!file_exists("cache/mercury")) {
 		mkdir("cache/mercury", 0755, true);
 	}
@@ -25,7 +25,7 @@ if(CACHE_MERCURY_CONTENT) {
 		}
 	}
 }
-if(CACHE_RSS_FEEDS) {
+if(CACHE_RSS_FEEDS == true) {
 	if (!file_exists("cache/rss")) {
 		mkdir("cache/rss", 0755, true);
 	}

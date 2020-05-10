@@ -83,7 +83,7 @@ if(get_http_response_code($requestedSubreddit) != "200"){
 
 
   // Echo cache size
-  if(CACHE_REDDIT_JSON || CACHE_MERCURY_CONTENT || CACHE_RSS_FEEDS) {
+  if(CACHE_REDDIT_JSON == true || CACHE_MERCURY_CONTENT == true || CACHE_RSS_FEEDS == true) {
     echo "<div class='cache-size d-none' data-cache-size='" . sizeFormat(directorySize("cache")) . "'></div>";
   }
 

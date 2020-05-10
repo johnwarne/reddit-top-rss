@@ -131,7 +131,7 @@ foreach($jsonFeedFileItems as $item) {
 
 
 		// Create "comments" node under "item"
-		if(strpos($item["data"]["domain"], "self.") === false) {
+		if(strpos($item["data"]["domain"], "self.") == false) {
 			$commentsNode = $itemNode->appendChild($xml->createElement("comments", "https://www.reddit.com" . $item["data"]["permalink"]));
 		}
 
@@ -214,7 +214,7 @@ foreach($jsonFeedFileItems as $item) {
 			break;
 
 			// Mercury-parsed lead image
-			case MERCURY_URL && strpos($item["data"]["domain"], "self.") === false:
+			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false:
 				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					$mercuryJSON = json_decode($mercuryJSON);
@@ -244,7 +244,7 @@ foreach($jsonFeedFileItems as $item) {
 			break;
 
 			// Mercury-parsed article content
-			case MERCURY_URL && strpos($item["data"]["domain"], "self.") === false && strpos($item["data"]["url"], "redd.it") === false:
+			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false && strpos($item["data"]["url"], "redd.it") == false:
 				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					if ($mercuryJSON = json_decode($mercuryJSON)) {
