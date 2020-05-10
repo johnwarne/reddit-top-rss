@@ -31,14 +31,17 @@ docker run -p 80:8080 johnny5w/reddit-top-rss:latest
 #### docker-compose
 
 ```yaml
-reddit-top-rss:
-  image: johnny5w/reddit-top-rss
-  container_name: reddit-top-rss
-  restart: unless-stopped
-  ports:
-    - 80:8080
-  environment:
-    - DEFAULT_SUBREDDIT=news
+
+version: '3'
+services:
+  reddit-top-rss:
+    image: johnny5w/reddit-top-rss
+    container_name: reddit-top-rss
+    restart: unless-stopped
+    ports:
+      - 80:8080
+    environment:
+      - DEFAULT_SUBREDDIT=news
 ```
 
 #### Docker environment variables
