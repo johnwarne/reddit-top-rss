@@ -12,7 +12,7 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 				// Otherwise, CURL the file and cache it
 				$ch = curl_init();
 				$curlOptHttpHeaderArray = ['Content-Type: application/json'];
-				if (defined('MERCURY_API_KEY')) {
+				if (defined('MERCURY_API_KEY') && !empty(MERCURY_API_KEY)) {
 					$curlOptHttpHeaderArray[] = 'x-api-key: ' . MERCURY_API_KEY;
 				}
 				curl_setopt($ch, CURLOPT_URL, MERCURY_URL . '/parser?url=' . $url);
@@ -30,7 +30,7 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			// Regularly CURL the Mercury content
 			$curl = curl_init();
 			$curlOptHttpHeaderArray = ['Content-Type: application/json'];
-			if (defined('MERCURY_API_KEY')) {
+			if (defined('MERCURY_API_KEY') && !empty(MERCURY_API_KEY)) {
 				$curlOptHttpHeaderArray[] = 'x-api-key: ' . MERCURY_API_KEY;
 			}
 			curl_setopt($curl, CURLOPT_URL, MERCURY_URL . '/parser?url=' . $itemDataUrl);
