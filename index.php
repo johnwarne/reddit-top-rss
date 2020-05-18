@@ -23,6 +23,9 @@ include 'cache.php';
 // View format
 if(isset($_GET['view']) && $_GET['view'] == 'rss') {
 	include 'rss.php';
+} elseif(isset($_GET['view']) && $_GET['view'] == 'vue') {
+	include 'vue.php';
 } else {
-	include 'html.php';
+	include 'vue.php';
+	// include 'html.php';
 }
