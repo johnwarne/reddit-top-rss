@@ -1,11 +1,12 @@
 <?php
 // With some help from https://www.sanwebe.com/2013/07/creating-valid-rss-feed-using-php
 
-header("Content-Type: text/xml; charset=utf-8", true);
+// header("Content-Type: text/xml; charset=utf-8", true);
+header("Content-Type: text/plain");
 
 
 // Return cached RSS feed, if it exists and if it was cached in the past hour
-if(CACHE_RSS_FEEDS) {
+if(CACHE_RSS_FEEDS == true) {
 	if(file_exists("cache/rss/" . $_SERVER["REQUEST_URI"] . ".xml") && time() - filemtime("cache/rss/" . $_SERVER["REQUEST_URI"] . ".xml") < 60 * 60) {
 		echo file_get_contents("cache/rss/" . $_SERVER["REQUEST_URI"] . ".xml", true);
 		exit;
@@ -305,7 +306,7 @@ foreach($jsonFeedFileItems as $item) {
 
 
 // Cache RSS feed
-if(CACHE_RSS_FEEDS) {
+if(CACHE_RSS_FEEDS == true) {
 	file_put_contents("cache/rss/" . $_SERVER["REQUEST_URI"] . ".xml", $xml->saveXML());
 }
 

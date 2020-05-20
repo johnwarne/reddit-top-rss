@@ -15,28 +15,37 @@ const server = browserSync.create();
 const tailwindcss = require('tailwindcss');
 const atimport = require("postcss-import");
 const purgecss = require("postcss-purgecss");
+const postcssNesting = require("postcss-nesting");
 
 
 
 // File paths
 const files = {
-    scssPath: 'scss/styles.scss',
+    cssPath: 'css/styles.css',
     jsPath: 'js/vue-scripts.js'
 }
 
-// Sass task: compiles the style.scss file into style.css
-function scssTask(){
-    return src(files.scssPath)
-        .pipe(sourcemaps.init()) // initialize sourcemaps first
-        .pipe(sass()) // compile SCSS to CSS
-        .pipe(postcss([ atimport(), tailwindcss(), purgecss({
-          content: ["**/*.php"],
-          defaultExtractor: content =>
-            content.match(/[\w-/:]+(?<!:)/g) || []
-        }), autoprefixer(), cssnano() ])) // PostCSS plugins
-        .pipe(sourcemaps.write('.')) // write sourcemaps file in current directory
-        .pipe(dest('dist/css')
-    ); // put final CSS in dist folder
+// Sass task: compiles the style.css file into style.css
+function cssTask(){
+    return src(files.cssPath)
+        // .pipe(sourcemaps.init()) // initialize sourcemaps first
+        // .pipe(sass()) // compile SCSS to CSS
+        .pipe(postcss([
+            // atimport(),
+            tailwindcss(),
+            postcssNesting(),
+            purgecss({
+              content: ["**/*.php", "css/styles.css"],
+              defaultExtractor: content =>
+              content.match(/[\w-/:]+(?<!:)/g) || []
+            }),
+            // autoprefixer(),
+            // cssnano()
+        ])) // PostCSS plugins
+        // .pipe(sourcemaps.write('.')) // write sourcemaps file in current directory
+        .pipe(dest('dist/css'))
+        .pipe(browserSync.stream({match: '**/*.css'}))
+    ; // put final CSS in dist folder
 }
 
 // JS task: concatenates and uglifies JS files to script.js
@@ -59,8 +68,8 @@ function cacheBustTask(){
         .pipe(dest('.'));
 }
 
-// Watch task: watch SCSS and JS files for changes
-// If any change, run scss and js tasks simultaneously
+// Watch task: watch CSS and JS files for changes
+// If any change, run css and js tasks simultaneously
 function watchTask(){
   browserSync.init({
 
@@ -70,10 +79,17 @@ function watchTask(){
             notify: false,
     open: false
  });
-    watch(['scss/**/*.scss', files.jsPath, 'vue.php'],
+    watch(['css/**/*.css'],
         {interval: 1000, usePolling: true}, //Makes docker work
         series(
-            parallel(scssTask, jsTask),
+            parallel(cssTask),
+            // cacheBustTask
+        )
+    );
+    watch([files.jsPath],
+        {interval: 1000, usePolling: true}, //Makes docker work
+        series(
+            parallel(jsTask),
             cacheBustTask
         )
     );
@@ -81,10 +97,10 @@ function watchTask(){
 }
 
 // Export the default Gulp task so it can be run
-// Runs the scss and js tasks simultaneously
+// Runs the css and js tasks simultaneously
 // then runs cacheBust, then watch task
 exports.default = series(
-    parallel(scssTask, jsTask),
+    parallel(cssTask, jsTask),
     cacheBustTask,
     watchTask
 );

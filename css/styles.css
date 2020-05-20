@@ -1,0 +1,208 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+h1 {
+  @apply text-5xl;
+}
+
+.font-family-karla {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.banner {
+  & svg.icon-clipboard {
+    display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    margin-right: 0.5em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+  }
+}
+
+#post-list {
+  @apply transition-all transition duration-200;
+  min-height: 150px;
+  &.notices {
+    @apply flex justify-center items-center overflow-auto;
+    &.warning {
+      @apply border-red-700 border-2;
+    }
+    & .notice {
+      @apply text-gray-700 text-lg;
+    }
+    &.warning {
+      & .notice {
+        @apply text-red-800;
+      }
+    }
+  }
+  & .media {
+    @apply border-b border-gray-400 p-2 flex transition-all transition duration-100;
+    @media screen and (min-width: 992px) {
+      @apply p-3;
+    }
+    @media screen and (min-width: 1200px) {
+      @apply p-4;
+    }
+    &:hover { @apply bg-gray-100; }
+    &:last-of-type {
+      @apply border-b-0;
+    }
+    & .thumbnail {
+      @apply h-10 w-10 rounded flex-shrink-0 overflow-hidden;
+      @screen md {
+        @apply h-12 w-12;
+      }
+      @screen lg {
+        @apply h-16 w-16;
+      }
+      &:empty {
+        @apply bg-gray-300;
+      }
+      & img {
+        @apply h-full w-full object-cover;
+        opacity: 0.1; filter: grayscale(1);
+      }
+      &:not(.default-image) img { opacity: 1; filter: none; }
+    }
+    & .media-body {
+      @apply ml-3 w-full flex flex-col justify-start transition-opacity transition duration-100;
+      @media screen and (min-width: 1200px) {
+        @apply ml-4;
+      }
+      & h5 {
+        @apply flex justify-between;
+        & span.badge {
+          @apply flex-shrink-0 order-last p-1 px-2 text-white bg-gray-500 text-xs rounded self-start ml-2 hidden;
+          @screen sm {
+            @apply block;
+          }
+          @screen lg {
+            @apply font-bold;
+          }
+          @media screen and (min-width: 768px) {
+            @apply ml-3;
+          }
+          @media screen and (min-width: 1200px) {
+            @apply ml-4;
+          }
+        }
+        & span.title {
+          @apply text-sm;
+          @screen lg {
+            @apply text-base;
+          }
+        }
+      }
+      & time {
+        @apply text-xs italic text-gray-500 mt-1;
+        @screen lg {
+            @apply text-sm;
+          }
+      }
+    }
+  }
+  &.loading {
+    @apply overflow-x-hidden relative;
+    &:after {
+      content: 'Loading posts…';
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      transform: translateY(-50%);
+      @apply text-center font-bold text-2xl text-gray-700;
+      @screen lg {
+        @apply text-4xl;
+      }
+    }
+    & .media {
+      @apply relative border-gray-200;
+      &::after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .4), transparent);
+        animation: loading 1.3s infinite;
+      }
+      & .thumbnail {
+        @apply relative bg-gray-200 overflow-x-hidden;
+        & img { display: none; }
+
+      }
+      & .media-body h5 span.title {
+        @apply relative w-full rounded overflow-x-hidden;
+        &::after {
+          display: block;
+          content: '';
+          position: absolute;
+          top: 0; right: 0; bottom: 0; left: 0;
+          @apply bg-gray-200 rounded;
+        }
+      }
+      & .media-body h5 span.badge {
+        @apply bg-gray-200 text-gray-200;
+      }
+      & .media-body time {
+        display: none;
+      }
+    }
+  }
+}
+
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+

@@ -6,7 +6,9 @@ include "functions.php";
 
 // Get requested subreddit
 // If none is specified, set a default
-if(isset($_GET["subreddit"])) {
+if(isset($data['subreddit'])) {
+	$subreddit = $data['subreddit'];
+} elseif(isset($_GET["subreddit"])) {
 	$subreddit = strip_tags(trim($_GET["subreddit"]));
 } else {
 	$subreddit = DEFAULT_SUBREDDIT;
@@ -18,8 +20,8 @@ $thresholdScore = 0;
 
 
 // Average posts per day
-if(isset($_GET["averagePostsPerDay"]) && $_GET["averagePostsPerDay"]) {
-	$thresholdPostsPerDay = $_GET["averagePostsPerDay"];
+if(((isset($data['filterType']) && $data['filterType'] == 'postsPerDay') || (isset($_GET["averagePostsPerDay"]) && $_GET["averagePostsPerDay"]))) {
+	$thresholdPostsPerDay = isset($data['filterType']) && $data['filterType'] == 'postsPerDay' ? $data['averagePostsPerDay'] : $_GET["averagePostsPerDay"];
 	$jsonFeedFileTopMonth = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=month&limit=1", "redditJSON", "cache/reddit/$subreddit-top-?t=month&limit=1.json", 60 * 5);
 	$jsonFeedFileTopMonthParsed = json_decode($jsonFeedFileTopMonth, true);
 	$jsonFeedFileTopMonthScore = $jsonFeedFileTopMonthParsed["data"]["children"][0]["data"]["score"];
@@ -40,8 +42,8 @@ if(isset($_GET["averagePostsPerDay"]) && $_GET["averagePostsPerDay"]) {
 
 
 // Threshold percentage
-if(isset($_GET["threshold"]) && $_GET["threshold"]) {
-	$thresholdPercentage = $_GET["threshold"];
+if(((isset($data['filterType']) && $data['filterType'] == 'percentage') || (isset($_GET["threshold"]) && $_GET["threshold"]))) {
+	$thresholdPercentage = isset($data['filterType']) && $data['filterType'] == 'percentage' ? $data['threshold'] : $_GET["threshold"];
 	$totalFeedScore = 0;
 	$jsonFeedFileTopMonth = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=month&limit=100", "redditJSON", "cache/reddit/$subreddit-top-?t=month&limit=100.json", 60 * 5);
 	$jsonFeedFileTopMonthParsed = json_decode($jsonFeedFileTopMonth, true);
@@ -55,8 +57,8 @@ if(isset($_GET["threshold"]) && $_GET["threshold"]) {
 
 
 // Threshold score
-if(isset($_GET["score"]) && $_GET["score"]) {
-	$thresholdScore = $_GET["score"];
+if((isset($data['filterType']) && $data['filterType'] == 'score') || (isset($_GET["score"]) && $_GET["score"])) {
+	$thresholdScore = isset($data['filterType']) && $data['filterType'] == 'score' ? $data['score'] : $_GET["score"];
 }
 
 

@@ -16,8 +16,8 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "postcss-import": "^12.0.1",
+    "postcss-nesting": "^7.0.1",
     "postcss-purgecss": "^2.0.3",
-    "postcss-scss": "^2.0.0",
     "tailwindcss": "^1.4.6"
   },
   "dependencies": {},

@@ -4,7 +4,7 @@
 function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 	if($requestType == "mercuryJSON") {
 		// Get Mercury content
-		if(CACHE_MERCURY_CONTENT) {
+		if(CACHE_MERCURY_CONTENT == true) {
 			// Use cached file if present
 			if (file_exists($cachedFileLocation) && time()-filemtime($cachedFileLocation) < $cacheExpiration) {
 				return file_get_contents($cachedFileLocation, true);
@@ -43,7 +43,7 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			return $mercuryJSON;
 			curl_close($ch);
 		}
-	} elseif($requestType == "redditJSON" && CACHE_REDDIT_JSON) {
+	} elseif($requestType == "redditJSON" && CACHE_REDDIT_JSON == true) {
 		// Get Reddit JSON file
 		// Use cached file if present
 		if (file_exists($cachedFileLocation) && time() - filemtime($cachedFileLocation) < $cacheExpiration) {
