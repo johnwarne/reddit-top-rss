@@ -4,15 +4,51 @@
 
 @import "tailwindcss/utilities";
 
+aside {
+  & .subreddit-field-group {
+    @apply relative;
+    &::after {
+      display: block; position: absolute; bottom: 7px; left: 0; content: "/r/"; pointer-events: none;
+      @apply text-gray-500 pl-3;
+    }
+    & input#subreddit {
+      padding-left: 28px;
+    }
+  }
+  & button#submit {
+    @apply cursor-pointer;
+    &.loading {
+      @apply opacity-50 cursor-default;
+    }
+  }
+}
+
+.icon-spinner2 {
+  display: inline-block;
+  position: relative;
+  top: -1.5px;
+  right: -4px;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: white;
+  fill: white;
+  animation: spin 1s infinite linear
+}
+
 h1 {
   @apply text-5xl;
 }
 
-.font-family-karla {
-  font-family: 'IBM Plex Sans', sans-serif;
-}
-
 .banner {
+<<<<<<< Updated upstream
+=======
+  & h1 {
+    @screen lg {
+      /* max-width: 200px; */
+    }
+  }
+>>>>>>> Stashed changes
   & svg.icon {
     display: inline-block;
     width: 1.3em;
@@ -26,14 +62,17 @@ h1 {
 
 #post-list {
   @apply transition-all transition duration-200;
-  min-height: 150px;
+  min-height: 90px;
   &.notices {
     @apply flex justify-center items-center overflow-auto;
     &.warning {
       @apply border-red-700 border-2;
     }
     & .notice {
-      @apply text-gray-700 text-lg;
+      @apply text-gray-700 text-lg p-4 text-center;
+      @screen lg {
+        @apply p-8;
+      }
     }
     &.warning {
       & .notice {
@@ -42,16 +81,19 @@ h1 {
     }
   }
   & .media {
-    @apply border-b border-gray-400 p-2 flex transition-all transition duration-100;
-    @media screen and (min-width: 992px) {
-      @apply p-3;
-    }
-    @media screen and (min-width: 1200px) {
-      @apply p-4;
-    }
+    @apply transition-all transition duration-100;
     &:hover { @apply bg-gray-100; }
     &:last-of-type {
       @apply border-b-0;
+    }
+    & .inner {
+      @apply border-b border-gray-400 p-4 flex;
+      @media screen and (min-width: 992px) {
+        @apply p-6;
+      }
+      @media screen and (min-width: 1200px) {
+        @apply p-10;
+      }
     }
     & .thumbnail {
       @apply h-10 w-10 rounded flex-shrink-0 overflow-hidden;
@@ -72,28 +114,40 @@ h1 {
     }
     & .media-body {
       @apply ml-3 w-full flex flex-col justify-start transition-opacity transition duration-100;
-      @media screen and (min-width: 1200px) {
+      @screen md {
         @apply ml-4;
+      }
+      @screen lg {
+        @apply ml-6;
       }
       & h5 {
         @apply flex justify-between;
         & span.badge {
-          @apply flex-shrink-0 order-last p-1 px-2 text-white bg-gray-500 text-xs rounded self-start ml-2 hidden;
+          @apply flex-shrink-0 order-last text-xs self-start ml-2 hidden items-center text-gray-600 pt-1 rounded;
           @screen sm {
-            @apply block;
+            @apply flex;
           }
           @screen lg {
             @apply font-bold;
           }
-          @media screen and (min-width: 768px) {
-            @apply ml-3;
-          }
-          @media screen and (min-width: 1200px) {
+          @screen md {
             @apply ml-4;
+          }
+          @screen lg {
+            @apply ml-6;
+          }
+          & .icon-arrow-up {
+            display: inline-block;
+            width: 1em;
+            height: 0.8em;
+            stroke-width: 0;
+            margin-right: 2px;
+            stroke: currentColor;
+            fill: currentColor;
           }
         }
         & span.title {
-          @apply text-sm;
+          @apply text-sm leading-snug;
           @screen lg {
             @apply text-base;
           }
@@ -109,7 +163,8 @@ h1 {
   }
   &.loading {
     @apply overflow-x-hidden relative;
-    &:after {
+    /* min-height: 150px; */
+    /* &:after {
       content: 'Loading posts…';
       display: inline-block;
       position: absolute;
@@ -121,7 +176,7 @@ h1 {
       @screen lg {
         @apply text-4xl;
       }
-    }
+    } */
     & .media {
       @apply relative border-gray-200;
       &::after {
@@ -152,7 +207,7 @@ h1 {
         @apply bg-gray-200 text-gray-200;
       }
       & .media-body time {
-        display: none;
+        opacity: 0;
       }
     }
   }
@@ -206,3 +261,7 @@ h1 {
   opacity: 1;
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

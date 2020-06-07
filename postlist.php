@@ -31,19 +31,33 @@ $response = [
 
 
 // Check if requested subreddit is valid
-$requestedSubreddit = "https://www.reddit.com/r/" . $data['subreddit'] . "/top/.json";
+$requestedSubreddit = "https://www.reddit.com/r/" . $subreddit . "/about.json";
 function get_http_response_code($requestedSubreddit) {
-  $headers = get_headers($requestedSubreddit);
-  return substr($headers[0], 9, 3);
+  if(cache_get($requestedSubreddit . 'Status.txt')) {
+    return cache_get($requestedSubreddit . 'Status.txt');
+  } else {
+    $headers = get_headers($requestedSubreddit);
+    $headersStatus = substr($headers[0], 9, 3);
+    cache_set($requestedSubreddit . 'Status.txt', $headersStatus);
+    return $headersStatus;
+  }
 }
-if(get_http_response_code($requestedSubreddit) != "200"){
+if(get_http_response_code($requestedSubreddit) != '200'){
   $response['subredditValid'] = false;
 } else {
-
+  // Get info about requested subreddit
+  $jsonAboutFile = getFile("https://www.reddit.com/r/" . $subreddit . "/about.json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5, null);
+  $response['jsonAboutFile'] = $jsonAboutFile;
+  $response['subredditIcon'] = $jsonAboutFile['data']['icon_img'];
+  // $response['subredditBannerImage'] = $jsonAboutFile['data']['header_img'];
+  $response['subredditTitle'] = $jsonAboutFile['data']['title'];
 
   // Get subreddit hot posts
-  $jsonFeedFile = getFile("https://www.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5);
-  $jsonFeedFileParsed = json_decode($jsonFeedFile, true);
+  $jsonFeedFile = getFile("https://www.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5, null);
+  $response['jsonFeedFile'] = $jsonFeedFile;
+  // $jsonFeedFileParsed = json_decode($jsonFeedFile, true);
+  $jsonFeedFileParsed = $jsonFeedFile;
+  $response['jsonFeedFileParsed'] = $jsonFeedFileParsed;
   $items = $jsonFeedFileParsed["data"]["children"];
   if(!empty($items)) {
     usort($items, "sortByScoreDesc");

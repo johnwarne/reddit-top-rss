@@ -1,13 +1,39 @@
 <?php
 
+function cache_set($key, $val) {
+	$val = var_export($val, true);
+	// HHVM fails at __set_state, so just use object cast for now
+	// $val = str_replace('stdClass::__set_state', '(object)', $val);
+	// Write to temp file first to ensure atomicity
+	// $tmp = "cache/tmp/$key." . uniqid('', true) . '.tmp';
+	$tmp = "cache/tmp/". urlencode($key) . uniqid('', true) . '.tmp';
+	// file_put_contents('cache/tmp/test.txt', date('YmdGis'));
+	// file_put_contents($tmp, '<?php $val = ' . $val . ';', LOCK_EX);
+	file_put_contents($tmp, '<?php $val = ' . $val . ';', LOCK_EX);
+	rename($tmp, "cache/tmp/" . urlencode($key));
+	// @include "cache/tmp/". urlencode($key);
+}
+
+
+
+function cache_get($key) {
+	@include "cache/tmp/" . urlencode($key);
+	return isset($val) ? $val : false;
+}
+
+
 // Get file
-function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
+function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration, $cacheObjectKey) {
 	if($requestType == "mercuryJSON") {
 		// Get Mercury content
 		if(CACHE_MERCURY_CONTENT == true) {
+			// Use cached object if present
+			if (cache_get($cacheObjectKey)) {
+				return cache_get($cacheObjectKey);
 			// Use cached file if present
-			if (file_exists($cachedFileLocation) && time()-filemtime($cachedFileLocation) < $cacheExpiration) {
-				return file_get_contents($cachedFileLocation, true);
+			// } elseif (file_exists($cachedFileLocation) && time()-filemtime($cachedFileLocation) < $cacheExpiration) {
+			// 	return file_get_contents($cachedFileLocation, true);
+			// 	cache_set($cacheObjectKey, $mercuryJSON);
 			} else {
 				// Otherwise, CURL the file and cache it
 				$ch = curl_init();
@@ -22,7 +48,8 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 				if(!$mercuryJSON) {
 					die("Connection Failure");
 				}
-				file_put_contents($cachedFileLocation, $mercuryJSON);
+				// file_put_contents($cachedFileLocation, $mercuryJSON);
+				cache_set($cacheObjectKey, $mercuryJSON);
 				return $mercuryJSON;
 				curl_close($ch);
 			}
@@ -46,8 +73,10 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 	} elseif($requestType == "redditJSON" && CACHE_REDDIT_JSON == true) {
 		// Get Reddit JSON file
 		// Use cached file if present
-		if (file_exists($cachedFileLocation) && time() - filemtime($cachedFileLocation) < $cacheExpiration) {
-			return file_get_contents($cachedFileLocation, true);
+		if (cache_get($url)) {
+			return cache_get($url);
+		// // } elseif (file_exists($cachedFileLocation) && time() - filemtime($cachedFileLocation) < $cacheExpiration) {
+		// // 	return file_get_contents($cachedFileLocation, true);
 		} else {
 			// Otherwise, CURL the file and cache it
       $ch = curl_init();
@@ -55,9 +84,12 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 			curl_setopt($ch, CURLOPT_URL, $url);
 			$curledFile = curl_exec($ch);
-			file_put_contents($cachedFileLocation, $curledFile);
-			return $curledFile;
+			// file_put_contents($cachedFileLocation, $curledFile);
+			// cache_set($cacheObjectKey, 'this is a thingsojfpda');
+			// return cache_get($cacheObjectKey);
+			cache_set($url, json_decode($curledFile, true));
 			curl_close($ch);
+			return cache_get($url);
 		}
   } else {
 		// Regularly CURL the file
@@ -67,6 +99,7 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		$curledFile = curl_exec($ch);
+		cache_set($cacheObjectKey, $curledFile);
 		return $curledFile;
 		curl_close($ch);
 	}

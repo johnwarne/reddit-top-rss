@@ -35,6 +35,9 @@ var app = new Vue({
 	el: '#app',
 	data: {
 		subreddit: subreddit,
+		subredditTitle: null,
+		subredditPrimaryColor: null,
+		subredditIcon: 'https://www.redditstatic.com/mweb2x/favicon/76x76.png',
 		filterType: filterType,
 		score: score,
 		computedScore: score,
@@ -44,6 +47,7 @@ var app = new Vue({
 		includeComments: includeComments,
 		includedComments: comments,
 		generatedRssUrl: null,
+		postsLoading: false,
 		posts: [
 			{
 				url: null,
@@ -77,14 +81,18 @@ var app = new Vue({
 			}, 250)
 		},
 		clearCache: function() {
+			var currentCachesize = this.cacheSize;
+			this.cacheSize = '0 B';
 			window.axios.post('cache-clear.php')
 			.then(function (response) {
-				this.cacheSize = '0 B';
 			}.bind(this))
 			.catch(function (error) {
 				console.log(error);
+				this.cacheSize = currentCachesize;
 			});
-			this.formSubmit();
+			setTimeout(function(){
+				this.formSubmit();
+			}.bind(this), 100);
 		},
 		buildURL: function() {
 			var port = window.location.port;
@@ -112,10 +120,10 @@ var app = new Vue({
 			window.history.pushState({}, window.title, '?' + searchParams);
 		},
 		formSubmit: function(event) {
-			document.getElementById("post-list").classList.add("loading");
-			document.getElementById("submit").classList.add("opacity-50", "cursor-not-allowed");
-			document.getElementById("submit").innerHTML = "Loading posts…";
+			this.postsLoading = true;
+			document.getElementById("submit").innerHTML = "Loading posts <svg class='icon icon-spinner2'><use xlink:href='#icon-spinner2'></use></svg>";
 			document.getElementById("post-list").classList.remove('notices', 'warning', 'info');
+			document.getElementById("post-list").classList.add('loading');
 			document.querySelectorAll('#post-list .notice').forEach(function(a){
 				a.remove()
 			});
@@ -128,25 +136,42 @@ var app = new Vue({
 				averagePostsPerDay : this.postsPerDay,
 			})
 			.then(function (response) {
-				document.getElementById("post-list").classList.remove("loading");
-				document.getElementById("submit").classList.remove("opacity-50", "cursor-not-allowed");
+				this.postsLoading = false;
 				document.getElementById("submit").innerHTML = "Submit";
+				document.getElementById("post-list").classList.remove('loading');
 				this.posts = response.data.postList;
+				this.cacheSize = response.data.cacheSize;
+				// console.log(response.data);
+				// console.log(response.data.jsonFeedFile);
+				// console.log(response.data.jsonFeedFileParsed);
+				// console.log('subredditValid: ' + response.data.subredditValid);
 				if(!response.data.subredditValid) {
 					console.log('subreddit is not valid');
+					this.subredditIcon = 'https://www.redditstatic.com/mweb2x/favicon/76x76.png';
 					document.getElementById("post-list").classList.add('notices', 'warning');
 					document.getElementById("post-list").innerHTML = '<div class="notice"><strong>/r/' + this.subreddit + '</strong> is not a valid subreddit</div>';
 				} else if(!response.data.postList.length) {
+					if(response.data.subredditIcon) {
+						this.subredditIcon = response.data.subredditIcon;
+					} else {
+						this.subredditIcon = 'https://www.redditstatic.com/mweb2x/favicon/76x76.png';
+					}
+					this.subredditTitle = response.data.subredditTitle;
 					document.getElementById("post-list").classList.add('notices', 'info');
 					document.getElementById("post-list").innerHTML = '<div class="notice">No hot posts in <strong>/r/' + this.subreddit + '</strong> match the filters</div>';
 				} else {
-					this.cacheSize = response.data.cacheSize;
+					if(response.data.subredditIcon) {
+						this.subredditIcon = response.data.subredditIcon;
+					} else {
+						this.subredditIcon = 'https://www.redditstatic.com/mweb2x/favicon/76x76.png';
+					}
+					this.subredditTitle = response.data.subredditTitle;
 					this.computedScore = response.data.thresholdScore;
 				}
 			}.bind(this))
 			.catch(function (error) {
 				console.log(error);
-				document.getElementById("submit").classList.remove("opacity-50", "cursor-not-allowed");
+				this.postsLoading = false;
 				document.getElementById("submit").innerHTML = "Submit";
 			});
 		}

@@ -19,7 +19,7 @@ include "sort-and-filter.php";
 
 
 // Get Subreddit feed
-$jsonFeedFile = getFile("https://www.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5);
+$jsonFeedFile = getFile("https://www.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5, "https://www.reddit.com/r/" . $subreddit . ".json");
 $jsonFeedFileParsed = json_decode($jsonFeedFile, true);
 $jsonFeedFileItems = $jsonFeedFileParsed["data"]["children"];
 usort($jsonFeedFileItems, "sortByCreatedDate");
@@ -216,7 +216,7 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Mercury-parsed lead image
 			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false:
-				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
+				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7, $itemDataUrl);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					$mercuryJSON = json_decode($mercuryJSON);
 					if ($mercuryJSON->lead_image_url) {
@@ -246,7 +246,7 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Mercury-parsed article content
 			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false && strpos($item["data"]["url"], "redd.it") == false:
-				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
+				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7, $itemDataUrl);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					if ($mercuryJSON = json_decode($mercuryJSON)) {
 						$itemDescription .= $mercuryJSON->content;
@@ -259,7 +259,7 @@ foreach($jsonFeedFileItems as $item) {
 		// Add article's best comments
 		if(isset($_GET["comments"]) && $_GET["comments"] > 0) {
 			$commentsURL = "https://www.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . (intval($_GET["comments"]) + 1);
-			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5);
+			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5, $commentsURL);
 			$commentsJSONParsed = json_decode($commentsJSON, true);
 			$comments = $commentsJSONParsed[1]["data"]["children"];
 			if($comments[0]["data"]["author"] == "AutoModerator") {
