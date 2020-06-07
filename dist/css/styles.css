@@ -992,6 +992,10 @@ video {
   font-size: 3rem;
 }
 
+.leading-none {
+  line-height: 1;
+}
+
 .leading-tight {
   line-height: 1.25;
 }
@@ -1649,7 +1653,7 @@ h1 {
   font-family: 'IBM Plex Sans', sans-serif;
 }
 
-.banner svg.icon-clipboard {
+.banner svg.icon {
     display: inline-block;
     width: 1.3em;
     height: 1.3em;

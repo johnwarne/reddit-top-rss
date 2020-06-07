@@ -156,23 +156,25 @@ if(isset($_GET["comments"])) {
 
 			<div class="banner bg-gray-600 text-white shadow-lg lg:shadow-2xl md:flex-shrink-0 z-20">
 				<div class="inner mx-auto px-8 pt-6 pb-8 flex justify-between items-end">
-					<h1 class="page-title">
+					<h1 class="page-title flex-1 leading-none">
 						<a :href="'https://www.reddit.com/r/' + subreddit + '/'" target="_blank">
 						/r/<span class="subreddit">{{subreddit}}</span></a>
 					</h1>
-					<p>Hot posts at or above a score of <strong>{{ computedScore }}</strong><span v-if="filterType === 'percentage'"> ({{ percentage }}% of monthly top posts' average score)</span><span v-if="filterType === 'postsPerDay'"> (giving a rough average of <strong>{{ postsPerDay }}</strong> posts per day)</span></p>
-					<button class="bg-transparent hover:bg-blue-500 text-white font-semibold py-2 px-4 border border-white hover:border-blue-500 rounded transition-all transition duration-100" :title="generatedRssUrl" target="_blank" v-on:click="myFunction" v-on:mouseout="outFunc">
-						<input type="text" :value="generatedRssUrl" id="myInput" class="" style="height: 0; width: 0; opacity: 0;"><div class="tooltip">
-							<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-						</div><svg style="position: absolute; width: 0; height: 0; overflow: hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-							<defs>
-								<symbol id="icon-clipboard" viewBox="0 0 28 28">
-									<path d="M12 26h14v-10h-6.5c-0.828 0-1.5-0.672-1.5-1.5v-6.5h-6v18zM16 3.5v-1c0-0.266-0.234-0.5-0.5-0.5h-11c-0.266 0-0.5 0.234-0.5 0.5v1c0 0.266 0.234 0.5 0.5 0.5h11c0.266 0 0.5-0.234 0.5-0.5zM20 14h4.672l-4.672-4.672v4.672zM28 16v10.5c0 0.828-0.672 1.5-1.5 1.5h-15c-0.828 0-1.5-0.672-1.5-1.5v-2.5h-8.5c-0.828 0-1.5-0.672-1.5-1.5v-21c0-0.828 0.672-1.5 1.5-1.5h17c0.828 0 1.5 0.672 1.5 1.5v5.125c0.203 0.125 0.391 0.266 0.562 0.437l6.375 6.375c0.594 0.594 1.062 1.734 1.062 2.562z"></path>
-								</symbol>
-							</defs>
-						</svg><svg class="icon icon-clipboard"><use xlink:href="#icon-clipboard"></use></svg>
-						<span class="text">Copy RSS feed link</span>
-					</button>
+					<p class="flex-1 text-center">Hot posts at or above a score of <strong>{{ computedScore }}</strong><span v-if="filterType === 'percentage'"> ({{ percentage }}% of monthly top posts' average score)</span><span v-if="filterType === 'postsPerDay'"> (giving a rough average of <strong>{{ postsPerDay }}</strong> posts per day)</span></p>
+					<span class="flex-1 text-right">
+						<button class="bg-transparent hover:bg-blue-500 text-white font-semibold py-2 px-4 border border-white hover:border-blue-500 rounded transition-all transition duration-100" :title="generatedRssUrl" target="_blank" v-on:click="myFunction" v-on:mouseout="outFunc">
+							<input type="text" :value="generatedRssUrl" id="myInput" class="" style="height: 0; width: 0; opacity: 0;"><div class="tooltip">
+								<span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+							</div><svg style="position: absolute; width: 0; height: 0; overflow: hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<defs>
+									<symbol id="icon-feed" viewBox="0 0 22 28">
+										<path d="M6 21c0 1.656-1.344 3-3 3s-3-1.344-3-3 1.344-3 3-3 3 1.344 3 3zM14 22.922c0.016 0.281-0.078 0.547-0.266 0.75-0.187 0.219-0.453 0.328-0.734 0.328h-2.109c-0.516 0-0.938-0.391-0.984-0.906-0.453-4.766-4.234-8.547-9-9-0.516-0.047-0.906-0.469-0.906-0.984v-2.109c0-0.281 0.109-0.547 0.328-0.734 0.172-0.172 0.422-0.266 0.672-0.266h0.078c3.328 0.266 6.469 1.719 8.828 4.094 2.375 2.359 3.828 5.5 4.094 8.828zM22 22.953c0.016 0.266-0.078 0.531-0.281 0.734-0.187 0.203-0.438 0.313-0.719 0.313h-2.234c-0.531 0-0.969-0.406-1-0.938-0.516-9.078-7.75-16.312-16.828-16.844-0.531-0.031-0.938-0.469-0.938-0.984v-2.234c0-0.281 0.109-0.531 0.313-0.719 0.187-0.187 0.438-0.281 0.688-0.281h0.047c5.469 0.281 10.609 2.578 14.484 6.469 3.891 3.875 6.188 9.016 6.469 14.484z"></path>
+									</symbol>
+								</defs>
+							</svg><svg class="icon icon-feed"><use xlink:href="#icon-feed"></use></svg>
+							<span class="text">Copy RSS feed link</span>
+						</button>
+					</span>
 				</div>
 			</div>
 
