@@ -114,7 +114,12 @@ foreach($jsonFeedFileItems as $item) {
 		if($item["data"]["domain"]) {
 			$itemTitle .= " (" . $item["data"]["domain"] . ")";
 		}
-		if(strpos($itemDataUrl,"imgur") !== false && strpos($itemDataUrl,"gallery") !== false) {
+		if (
+			// Check for an imgur gallery or a Reddit gallery
+			(strpos($itemDataUrl,"imgur") !== false &&
+			strpos($itemDataUrl,"gallery") !== false) ||
+			isset($item["data"]["gallery_data"])
+		) {
 			$itemTitle .= " (Gallery)";
 		}
 		$titleNode = $itemNode->appendChild($xml->createElement("title", $itemTitle));
