@@ -204,10 +204,11 @@ foreach($jsonFeedFileItems as $item) {
 					$gallery_image_url = str_replace("&amp;", "&", $gallery_image_url); 
 					
 					// Surround the URL with html. Set <a> tag to the image URL.
-					$mediaEmbed = '<a href="' . $gallery_image_url . '">';
-					$mediaEmbed .= '<img src="' . $gallery_image_url . '" />';
-					$mediaEmbed .= '</a>';
-					$mediaEmbed .= '<br/>';
+					$mediaEmbed = '
+					<a href="' . $gallery_image_url . '">
+						<img src="' . $gallery_image_url . '" />
+					</a>
+					<br/>';
 
 					// Add to item description
 					$itemDescription .= $mediaEmbed;
