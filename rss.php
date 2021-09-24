@@ -171,6 +171,44 @@ foreach($jsonFeedFileItems as $item) {
 				$itemDescription .= $mediaEmbed;
 			break;
 
+			// Gallery embeds
+			case isset($item["data"]["gallery_data"]):
+				// Gallery data doesn't actually include image links,
+				// so we'll loop through the media_metadata
+				foreach ($item["data"]["media_metadata"] as $media_item){
+					/*
+					In the following variable, the number after "p" represents width.
+					I decided on "3", which is 640.
+					
+					Options I've seen:
+						0 = 108
+						1 = 216
+						2 = 320
+						3 = 640
+						4 = 960
+						5 = 1080
+						6 = 3024
+					One final option is to use the original image size (I think),
+					which is done with:
+					$gallery_image_url = $media_item["s"]["u"]; 
+					*/
+					
+					$gallery_image_url = $media_item["p"]["3"]["u"];
+
+					// URL in json contains &amp;. Replace it.
+					$gallery_image_url = str_replace("&amp;", "&", $gallery_image_url); 
+					
+					// Surround the URL with html. Set <a> tag to the image URL.
+					$mediaEmbed = '<a href="' . $gallery_image_url . '">';
+					$mediaEmbed .= '<img src="' . $gallery_image_url . '" />';
+					$mediaEmbed .= '</a>';
+					$mediaEmbed .= '<br/>';
+
+					// Add to item description
+					$itemDescription .= $mediaEmbed;
+				}
+			break;
+
 			// Imgur gifv
 			case strpos($item["data"]["url"], "imgur") && strpos($item["data"]["url"], "gifv"):
 				$mediaEmbed = "<video poster='" . str_replace(".gifv", "h.jpg", $item["data"]["url"]) . "' controls='true' preload='auto' autoplay='false' muted='muted' loop='loop' webkit-playsinline='' style='max-width: 90vw;'>
