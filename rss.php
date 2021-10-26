@@ -185,6 +185,22 @@ foreach($jsonFeedFileItems as $item) {
 				$itemDescription .= $mediaEmbed;
 			break;
 
+			// Reddit galleries
+			case strpos($item["data"]["url"], "www.reddit.com/gallery/"):
+				$jsonGalleryURL = str_replace("www.reddit.com/gallery/", "www.reddit.com/comments/", $item["data"]["url"]) . '.json';
+				$jsonGalleryFileName = str_replace("https://www.reddit.com/comments/", "", $jsonGalleryURL);
+				$jsonGalleryFile = getFile($jsonGalleryURL, "redditJSON", "cache/reddit/$jsonGalleryFileName", 60 * 5);
+				$jsonGalleryFileParsed = json_decode($jsonGalleryFile, true);
+				$jsonGalleryFileItems = $jsonGalleryFileParsed[0]["data"]["children"][0]["data"]["media_metadata"];
+				$mediaEmbed = "";
+				foreach ($jsonGalleryFileItems as $image) :
+					$previewImageURL = str_replace("preview.redd.it", "i.redd.it", $image["p"]["3"]["u"]);
+					$fullImageURL = str_replace("preview.redd.it", "i.redd.it", $image["s"]["u"]);
+					$mediaEmbed .= "<p><a href='" . $fullImageURL . "'><img src='" . $previewImageURL . "'></a></p>";
+				endforeach;
+				$itemDescription .= $mediaEmbed;
+				break;
+
 			// Reddit images
 			case $item["data"]["domain"] == "i.redd.it":
 				$mediaEmbed = "<p><a href='" . $item["data"]["url"] . "'><img src='" . $item["data"]["url"] . "'></img></a></p>";
