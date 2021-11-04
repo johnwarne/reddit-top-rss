@@ -184,7 +184,10 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Reddit videos
 			case $item["data"]["domain"] == "v.redd.it":
-				$mediaEmbed = "<video src='" . $item["data"]["secure_media"]["reddit_video"]["fallback_url"] . "' controls='true' preload='auto' autoplay='false' muted='muted' loop='loop' webkit-playsinline='' style='max-width: 90vw;'></video>";
+				$mediaEmbed = "<iframe src='https://www.redditmedia.com" . $item["data"]["permalink"] . "?ref_source=embed&amp;ref=share&amp;embed=true&amp;theme=dark' sandbox='allow-scripts allow-same-origin allow-popups' style='border: none; min-height: 636px;' width='640' height='636'></iframe>";
+				if(isset($item["data"]["thumbnail"])) {
+					$mediaEmbed .= "<p><img src='" . $item["data"]["thumbnail"] . "' /></p>";
+				}
 				$itemDescription .= $mediaEmbed;
 			break;
 
