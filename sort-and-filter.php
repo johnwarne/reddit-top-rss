@@ -45,12 +45,17 @@ if(isset($_GET["threshold"]) && $_GET["threshold"]) {
 	$totalFeedScore = 0;
 	$jsonFeedFileTopMonth = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=month&limit=100", "redditJSON", "cache/reddit/$subreddit-top-?t=month&limit=100.json", 60 * 5);
 	$jsonFeedFileTopMonthParsed = json_decode($jsonFeedFileTopMonth, true);
+	$jsonFeedFileTopMonthItemsCount = count($jsonFeedFileTopMonthParsed["data"]["children"]) ?: 0;
 	$jsonFeedFileTopMonthItems = $jsonFeedFileTopMonthParsed["data"]["children"];
 		foreach ($jsonFeedFileTopMonthItems as $feedItem) {
 		$totalFeedScore += $feedItem["data"]["score"];
 	}
 	$averageFeedScore = $totalFeedScore/count($jsonFeedFileTopMonthItems);
-	$thresholdScore = floor($averageFeedScore * $thresholdPercentage/100);
+	if($jsonFeedFileTopMonthItemsCount) {
+		$thresholdScore = floor($averageFeedScore * $thresholdPercentage/$jsonFeedFileTopMonthItemsCount);
+	} else {
+		$thresholdScore = 1000000;
+	}
 }
 
 
