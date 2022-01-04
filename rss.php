@@ -184,10 +184,10 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Reddit videos
 			case $item["data"]["domain"] == "v.redd.it":
-				$mediaEmbed = "<iframe src='https://www.redditmedia.com" . $item["data"]["permalink"] . "?ref_source=embed&amp;ref=share&amp;embed=true&amp;theme=dark' sandbox='allow-scripts allow-same-origin allow-popups' style='border: none; min-height: 90% !important; overflow: scroll; width: 90% !important;' width='300' height='800' scrolling='yes'></iframe>";
-				if(isset($item["data"]["thumbnail"])) {
-					$mediaEmbed .= "<p><img src='" . $item["data"]["thumbnail"] . "' /></p>";
-				}
+				$mediaEmbed = "<video poster='" . $item["data"]["thumbnail"] . "' controls='true' preload='auto' autoplay='false' loop='loop' webkit-playsinline='' height='" . $item["data"]["media"]["reddit_video"]["height"] . "' width='" . $item["data"]["media"]["reddit_video"]["width"] . "'>
+					<source src='" . $item["data"]["media"]["reddit_video"]["fallback_url"] . "' type='video/mp4'>
+				</video>";
+				$mediaEmbed .= "<p><img src='" . $item["data"]["thumbnail"] . "' /></p>";
 				$itemDescription .= $mediaEmbed;
 			break;
 
