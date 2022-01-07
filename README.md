@@ -108,3 +108,12 @@ By default Reddit Top RSS will cache Reddit JSON files, rendered RSS XML files, 
 This project is released under the [MIT License].
 
 [MIT License]: http://www.opensource.org/licenses/MIT
+
+## Buy me a coffee 
+
+[![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
+
+---
+
+[buymecoffee]: https://www.buymeacoffee.com/johnwarne
+[buymecoffeebadge]: https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=for-the-badge
