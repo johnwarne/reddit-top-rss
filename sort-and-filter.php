@@ -37,7 +37,7 @@ if(isset($_GET["averagePostsPerDay"]) && $_GET["averagePostsPerDay"]) {
 	$jsonFeedFileTopParsedScore = $jsonFeedFileTopParsed["data"]["children"][0]["data"]["score"];
 	$scoreMultiplier = $jsonFeedFileTopMonthScore / $jsonFeedFileTopParsedScore;
 	if($jsonFeedFileTopMonthItemsCount) {
-		$thresholdScore = round(array_slice($jsonFeedFileTopItems, ($thresholdPostsPerDay - 1), 1)[0]["data"]["score"] * $scoreMultiplier);
+		$thresholdScore = round(array_values(array_slice($jsonFeedFileTopItems, -1))[0]["data"]["score"] * $scoreMultiplier);
 	} else {
 		$thresholdScore = 1000000;
 	}
