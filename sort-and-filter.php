@@ -23,19 +23,22 @@ if(isset($_GET["averagePostsPerDay"]) && $_GET["averagePostsPerDay"]) {
 	$jsonFeedFileTopMonth = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=month&limit=1", "redditJSON", "cache/reddit/$subreddit-top-?t=month&limit=1.json", 60 * 5);
 	$jsonFeedFileTopMonthParsed = json_decode($jsonFeedFileTopMonth, true);
 	$jsonFeedFileTopMonthItemsCount = count($jsonFeedFileTopMonthParsed["data"]["children"][0]["data"]) ?: 0;
-	$jsonFeedFileTopMonthScore = $jsonFeedFileTopMonthParsed["data"]["children"][0]["data"]["score"];
+	$jsonFeedFileTopMonthScore = getFile($jsonFeedFileTopMonthParsed["data"]["children"][0]["data"]["score"], "redditScore", "cache/scores/$subreddit-TopMonthScore", 60 * 60);
 	if($thresholdPostsPerDay <= 3) {
+		$thresholdPostsPerDaySize = 'low';
 		$jsonFeedFileTop = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=month&limit=" . $thresholdPostsPerDay * 30, "redditJSON", "cache/reddit/$subreddit-top-?t=month&limit=" . $thresholdPostsPerDay * 30 . ".json", 60 * 5);
 	} elseif($thresholdPostsPerDay <= 14) {
+		$thresholdPostsPerDaySize = 'medium';
 		$jsonFeedFileTop = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=week&limit=" . $thresholdPostsPerDay * 7, "redditJSON", "cache/reddit/$subreddit-top-?t=week&limit=" . $thresholdPostsPerDay * 7 . ".json", 60 * 5);
 	} else {
+		$thresholdPostsPerDaySize = 'high';
 		$jsonFeedFileTop = getFile("https://www.reddit.com/r/" . $subreddit . "/top/.json?t=day&limit=" . $thresholdPostsPerDay, "redditJSON", "cache/reddit/$subreddit-top-?t=day&limit=" . $thresholdPostsPerDay . ".json", 60 * 5);
 	}
 	$jsonFeedFileTopParsed = json_decode($jsonFeedFileTop, true);
 	$jsonFeedFileTopItems = $jsonFeedFileTopParsed["data"]["children"];
 	usort($jsonFeedFileTopItems, "sortByScoreDesc");
 	$jsonFeedFileTopParsedScore = $jsonFeedFileTopParsed["data"]["children"][0]["data"]["score"];
-	$scoreMultiplier = $jsonFeedFileTopMonthScore / $jsonFeedFileTopParsedScore;
+	$scoreMultiplier = getFile($jsonFeedFileTopMonthScore / $jsonFeedFileTopParsedScore, "redditScore", "cache/scores/$subreddit-averagePostsPerDay-$thresholdPostsPerDaySize-multiplier", 60 * 60);
 	if($jsonFeedFileTopMonthItemsCount) {
 		$thresholdScore = round(array_values(array_slice($jsonFeedFileTopItems, -1))[0]["data"]["score"] * $scoreMultiplier);
 	} else {
@@ -55,7 +58,7 @@ if(isset($_GET["threshold"]) && $_GET["threshold"]) {
 		foreach ($jsonFeedFileTopMonthItems as $feedItem) {
 		$totalFeedScore += $feedItem["data"]["score"];
 	}
-	$averageFeedScore = $totalFeedScore/count($jsonFeedFileTopMonthItems);
+	$averageFeedScore = getFile($totalFeedScore/count($jsonFeedFileTopMonthItems), "redditScore", "cache/scores/$subreddit-averageFeedScore", 60 * 60);
 	if($jsonFeedFileTopMonthItemsCount) {
 		$thresholdScore = floor($averageFeedScore * $thresholdPercentage/$jsonFeedFileTopMonthItemsCount);
 	} else {

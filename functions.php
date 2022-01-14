@@ -59,6 +59,16 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			return $curledFile;
 			curl_close($ch);
 		}
+	} elseif($requestType == "redditScore" && CACHE_REDDIT_JSON) {
+		// Get Reddit score file
+		// Use cached file if present
+		if (file_exists($cachedFileLocation) && time() - filemtime($cachedFileLocation) < $cacheExpiration) {
+			return file_get_contents($cachedFileLocation, true);
+		} else {
+			// Otherwise, cache the score file
+			file_put_contents($cachedFileLocation, $url);
+			return $url;
+		}
   } else {
 		// Regularly CURL the file
 		$ch = curl_init();

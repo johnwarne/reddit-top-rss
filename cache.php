@@ -12,6 +12,16 @@ if(CACHE_REDDIT_JSON == true) {
 			unlink($file);
 		}
 	}
+	if (!file_exists("cache/scores")) {
+		mkdir("cache/scores", 0755, true);
+	}
+	// Remove score files older than 1 hour
+	$dir = "cache/scores/";
+	foreach (glob($dir . "*") as $file) {
+		if(time() - filectime($file) > 60 * 60) {
+			unlink($file);
+		}
+	}
 }
 if(CACHE_MERCURY_CONTENT == true) {
 	if (!file_exists("cache/mercury")) {
