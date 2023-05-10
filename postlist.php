@@ -14,7 +14,9 @@ include "sort-and-filter.php";
 // Check if requested subreddit is valid
 $requestedSubreddit = "https://www.reddit.com/r/" . $subreddit . "/top/.json";
 function get_http_response_code($requestedSubreddit) {
-  $headers = get_headers($requestedSubreddit);
+  $reqOptions = array('http' => array('user_agent' => REDDIT_USER_AGENT));
+  $reqContext = stream_context_create($reqOptions);
+  $headers = get_headers($requestedSubreddit, false, $reqContext);
   return substr($headers[0], 9, 3);
 }
 if(get_http_response_code($requestedSubreddit) != "200"){

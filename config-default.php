@@ -48,3 +48,10 @@ if (isset($_SERVER["CONFIG_VERSION"])) {
 } else {
   define('CONFIG_VERSION', 1);
 }
+
+// Reddit-facing User-Agent (see https://github.com/reddit-archive/reddit/wiki/api#rules)
+if (isset($_SERVER["REDDIT_USER_AGENT"])) {
+  define('REDDIT_USER_AGENT', $_SERVER["REDDIT_USER_AGENT"]);
+} else {
+  define('REDDIT_USER_AGENT', 'php:top.reddit.rss:0.0.1');
+}

@@ -18,6 +18,8 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 				curl_setopt($ch, CURLOPT_URL, MERCURY_URL . '/parser?url=' . $url);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $curlOptHttpHeaderArray);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				// Probably not needed but set in case we're pulling from Reddit
+				curl_setopt($ch, CURLOPT_USERAGENT, REDDIT_USER_AGENT);
 				$mercuryJSON = curl_exec($ch);
 				if(!$mercuryJSON) {
 					die("Connection Failure");
@@ -36,6 +38,8 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			curl_setopt($curl, CURLOPT_URL, MERCURY_URL . '/parser?url=' . $itemDataUrl);
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $curlOptHttpHeaderArray);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			// Probably not needed but set in case we're pulling from Reddit
+			curl_setopt($curl, CURLOPT_USERAGENT, REDDIT_USER_AGENT);
 			$mercuryJSON = curl_exec($curl);
 			if(!$mercuryJSON) {
 				die("Connection Failure");
@@ -50,8 +54,9 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 			return file_get_contents($cachedFileLocation, true);
 		} else {
 			// Otherwise, CURL the file and cache it
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_USERAGENT, REDDIT_USER_AGENT);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 			curl_setopt($ch, CURLOPT_URL, $url);
 			$curledFile = curl_exec($ch);
@@ -74,6 +79,7 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_USERAGENT, REDDIT_USER_AGENT);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		$curledFile = curl_exec($ch);

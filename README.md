@@ -56,6 +56,7 @@ The following optional environment variables can be used to override the applica
 | CACHE_REDDIT_JSON     | Whether to cache the JSON responses from Reddit.<br/>Default: `true`           |
 | CACHE_MERCURY_CONTENT | Whether to cache the responses from your Mercury instance.<br/>Default: `true` |
 | CACHE_RSS_FEEDS       | Whether to cache the outputted XML from Reddit Top RSS.<br/>Default: `true`    |
+| REDDIT_USER_AGENT     | Reddit-facing User-Agent header.<br/>Default: `php:top.reddit.rss:0.0.1`       |
 
 ## Supported URL parameters
 
