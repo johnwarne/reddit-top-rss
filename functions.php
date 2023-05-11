@@ -1,7 +1,7 @@
 <?php
 
 // Get file
-function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
+function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration, $accessToken) {
 	if($requestType == "mercuryJSON") {
 		// Get Mercury content
 		if(CACHE_MERCURY_CONTENT) {
@@ -51,6 +51,8 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
 		} else {
 			// Otherwise, CURL the file and cache it
       $ch = curl_init();
+			curl_setopt($ch, CURLOPT_USERAGENT, 'web:toprss:1.0 (by /u/' . REDDIT_USER . ')');
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $accessToken));
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 			curl_setopt($ch, CURLOPT_URL, $url);
@@ -72,7 +74,8 @@ function getFile($url, $requestType, $cachedFileLocation, $cacheExpiration) {
   } else {
 		// Regularly CURL the file
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'web:toprss:1.0 (by /u/' . REDDIT_USER . ')');
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $accessToken));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_URL, $url);

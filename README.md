@@ -6,17 +6,35 @@ Reddit Top RSS is a set of scripts for [Reddit's API](https://www.reddit.com/dev
 
 ![Reddit Top RSS screenshot](dist/img/preview.gif?raw=true)
 
-[https://reddit-top-rss.herokuapp.com/](https://reddit-top-rss.herokuapp.com/)
-
 ## Motivation
 
 I prefer to interact with Reddit in a low-volume way, so I let Reddit Top RSS surface the most popular posts per subreddit in my [RSS reader of choice](https://reederapp.com/). I usually use the `averagePostsPerDay` filter so I can expect a certain amount of posts in my feeds per day.
 
 ## Installation and usage
 
+### Reddit app setup
+
+**Due to Reddit's 2023 updated API policies it is now required to first set up an app in your Reddit account that Reddit Top RSS will authenticate through.**
+
+1. First, log into your Reddit account.
+1. Navigate to the Reddit app preferences page: [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)
+1. Click the `create app` or `create another app` button, depending on whether you’ve already created an app before.
+1. Choose any name for the app. I've chosen `Top RSS`. Reddit will not allow you to use `Reddit` in the name.
+1. Set the type of app to `web app`.
+1. You can leave `description` and `about url` fields blank.
+1. Enter in any valid URI in the `redirect uri` field. I've used `http://reddit-top-rss.test`.
+1. Click the `create app` button when you’re done.
+1. Your app’s client ID and client secret will be displayed. You'll need to add these to either your `config.php` or Docker environment variables.
+
 ### Manual
 
-To install manually, clone this repository somewhere with PHP >= 5.6 installed, and open `index.php` in a browser to view the front end. Enter your parameters into the fields to get a preview of the posts that the filters will output. Click the `RSS` button at top to open a new tab with the rendered RSS XML output of the specified filters. This is the URL you subscribe to in your RSS aggregator.
+To install this repository manually:
+
+1. Clone this repository somewhere with PHP >= 5.6 installed.
+1. Copy `config-default.php` to `config.php`.
+1. Enter your Reddit user, app ID, and secret into lines 49, 56, and 63, respectively.
+1. Open `index.php` in a browser to view the front end.
+1. Enter your parameters into the fields to get a preview of the posts that the filters will output. Click the `RSS` button at top to open a new tab with the rendered RSS XML output of the specified filters. This is the URL you subscribe to in your RSS aggregator.
 
 ### Docker
 
@@ -25,7 +43,7 @@ A docker image is available at [https://hub.docker.com/r/johnny5w/reddit-top-rss
 #### Command line
 
 ```docker
-docker run -p 80:8080 johnny5w/reddit-top-rss:latest
+docker run -p 80:8080 -e REDDIT_USER=your_reddit_user -e REDDIT_CLIENT_ID=your_app_id -e REDDIT_CLIENT_SECRET=your_app_secret johnny5w/reddit-top-rss:latest
 ```
 
 #### docker-compose
@@ -41,10 +59,21 @@ services:
     ports:
       - 80:8080
     environment:
+      - REDDIT_USER=your_reddit_user
+      - REDDIT_CLIENT_ID=your_app_id
+      - REDDIT_CLIENT_SECRET=your_app_secret
       - DEFAULT_SUBREDDIT=news
 ```
 
 #### Docker environment variables
+
+The following required environment variables must be set, or you will not be authorized with Reddit's API:
+
+| Parameter             | Function                                                                       |
+| --------------------- | ------------------------------------------------------------------------------ |
+| REDDIT_USER           | Your Reddit user account with which you've created an app                      |
+| REDDIT_CLIENT_ID      | The client ID of the app you've created                                        |
+| REDDIT_CLIENT_SECRET  | The secret for the app you've created                                          |
 
 The following optional environment variables can be used to override the application defaults:
 
@@ -93,7 +122,7 @@ Accepted values are `html` and `rss`:
 
 ## Configuration
 
-Reddit Top RSS comes with a default configuration. If you'd like to turn caching off, set a different default subreddit, or use a self-hosted [Mercury parser](#mercury-parser), just copy `config-default.php` to `config.php` and enter your changed values.
+Reddit Top RSS comes with a default configuration. If you'd like to turn caching off, set a different default subreddit, or use a self-hosted [Mercury parser](#mercury-parser), just enter your desired values in `config.php`.
 
 ## Mercury parser<a name="mercury-parser"></a>
 
@@ -109,7 +138,7 @@ This project is released under the [MIT License].
 
 [MIT License]: http://www.opensource.org/licenses/MIT
 
-## Buy me a coffee 
+## Buy me a coffee
 
 [![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 

@@ -1,11 +1,14 @@
 <?php
 
 // Config
-if (file_exists('config.php')) {
-	require_once 'config.php';
-} else {
-	require_once 'config-default.php';
+if (!file_exists('config.php')) {
+	copy('config-default.php', 'config.php');
 }
+require_once 'config.php';
+
+
+// Auth
+include 'auth.php';
 
 
 // Globals

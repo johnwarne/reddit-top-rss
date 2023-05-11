@@ -18,7 +18,7 @@ include "sort-and-filter.php";
 
 
 // Get Subreddit feed
-$jsonFeedFile = getFile("https://www.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5);
+$jsonFeedFile = getFile("https://oauth.reddit.com/r/" . $subreddit . ".json", "redditJSON", "cache/reddit/$subreddit.json", 60 * 5, $accessToken);
 $jsonFeedFileParsed = json_decode($jsonFeedFile, true);
 $jsonFeedFileItems = $jsonFeedFileParsed["data"]["children"];
 usort($jsonFeedFileItems, "sortByCreatedDate");
@@ -191,9 +191,9 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Reddit galleries
 			case strpos($item["data"]["url"], "www.reddit.com/gallery/"):
-				$jsonGalleryURL = str_replace("www.reddit.com/gallery/", "www.reddit.com/comments/", $item["data"]["url"]) . '.json';
-				$jsonGalleryFileName = str_replace("https://www.reddit.com/comments/", "", $jsonGalleryURL);
-				$jsonGalleryFile = getFile($jsonGalleryURL, "redditJSON", "cache/reddit/$jsonGalleryFileName", 60 * 5);
+				$jsonGalleryURL = str_replace("www.reddit.com/gallery/", "oauth.reddit.com/comments/", $item["data"]["url"]) . '.json';
+				$jsonGalleryFileName = str_replace("https://oauth.reddit.com/comments/", "", $jsonGalleryURL);
+				$jsonGalleryFile = getFile($jsonGalleryURL, "redditJSON", "cache/reddit/$jsonGalleryFileName", 60 * 5, $accessToken);
 				$jsonGalleryFileParsed = json_decode($jsonGalleryFile, true);
 				$jsonGalleryFileItems = $jsonGalleryFileParsed[0]["data"]["children"][0]["data"]["media_metadata"];
 				$mediaEmbed = "";
@@ -235,7 +235,7 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Mercury-parsed lead image
 			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false:
-				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
+				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7, $accessToken);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					$mercuryJSON = json_decode($mercuryJSON);
 					if ($mercuryJSON->lead_image_url) {
@@ -265,7 +265,7 @@ foreach($jsonFeedFileItems as $item) {
 
 			// Mercury-parsed article content
 			case MERCURY_URL && strpos($item["data"]["domain"], "self.") == false && strpos($item["data"]["url"], "redd.it") == false:
-				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7);
+				$mercuryJSON = getFile($itemDataUrl, "mercuryJSON", "cache/mercury/" . filter_var($itemDataUrl, FILTER_SANITIZE_ENCODED) . ".json", 60 * 60 * 24 * 7, $accessToken);
 				if(!isset(json_decode($mercuryJSON)->message) || json_decode($mercuryJSON)->message != "Internal server error") {
 					if ($mercuryJSON = json_decode($mercuryJSON)) {
 						$itemDescription .= $mercuryJSON->content;
@@ -277,8 +277,8 @@ foreach($jsonFeedFileItems as $item) {
 
 		// Add article's best comments
 		if(isset($_GET["comments"]) && $_GET["comments"] > 0) {
-			$commentsURL = "https://www.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . (intval($_GET["comments"]) + 1);
-			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5);
+			$commentsURL = "https://oauth.reddit.com/r/" . $item["data"]["subreddit"] . "/comments/" . $item["data"]["id"] . ".json?depth=1&showmore=0&limit=" . (intval($_GET["comments"]) + 1);
+			$commentsJSON = getFile($commentsURL, "redditJSON", "cache/reddit/" . $item["data"]["subreddit"] . "-comments-" . $item["data"]["id"] . $_GET["comments"] . ".json", 60 * 5, $accessToken);
 			$commentsJSONParsed = json_decode($commentsJSON, true);
 			$comments = $commentsJSONParsed[1]["data"]["children"];
 			if($comments[0]["data"]["author"] == "AutoModerator") {
