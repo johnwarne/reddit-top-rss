@@ -1,3 +1,9 @@
+# Update!
+
+This project has been superseded by [Upvote RSS](https://github.com/johnwarne/upvote-rss), my newer project that adds feed support for article content, summaries, comments, media embeds, additional platforms (Lemmy and Hacker News), and others. Check it out!
+
+https://github.com/johnwarne/upvote-rss
+
 # Reddit Top RSS
 
 Reddit Top RSS is a set of scripts for [Reddit's API](https://www.reddit.com/dev/api/) that generates RSS feeds for specified subreddits with score thresholds. To preview your outputted feed items there is a front end that utilizes the Bootstrap v4 framework.
